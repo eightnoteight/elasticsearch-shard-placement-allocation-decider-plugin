@@ -1,0 +1,62 @@
+version: '2.2'
+services:
+  elasticsearch:
+    build: .
+    container_name: elasticsearch
+    environment:
+    - cluster.name=docker-cluster
+    - bootstrap.memory_lock=true
+    - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+    - esdata1-v1:/usr/share/elasticsearch/data
+    ports:
+    - 9200:9200
+    networks:
+    - esnet
+  elasticsearch2:
+    build: .
+    container_name: elasticsearch2
+    environment:
+    - cluster.name=docker-cluster
+    - bootstrap.memory_lock=true
+    - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    - "discovery.zen.ping.unicast.hosts=elasticsearch"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+    - esdata2-v1:/usr/share/elasticsearch/data
+    networks:
+    - esnet
+  elasticsearch3:
+    build: .
+    container_name: elasticsearch3
+    environment:
+    - cluster.name=docker-cluster
+    - bootstrap.memory_lock=true
+    - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    - "discovery.zen.ping.unicast.hosts=elasticsearch"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+    - esdata3-v1:/usr/share/elasticsearch/data
+    networks:
+    - esnet
+
+volumes:
+  esdata1-v1:
+    driver: local
+  esdata2-v1:
+    driver: local
+  esdata3-v1:
+    driver: local
+
+networks:
+  esnet:

@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+}
+
+group 'space.eightnoteight.elasticsearch'
+version '6.2.4-0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    custom_dependency_injection
+}
+
+dependencies {
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version:'6.2.4'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task pluginZip(type: Zip) {
+    archiveName 'elasticsearch-shard-placement-allocation-decider-plugin.zip'
+    destinationDir file('./deployment/docker/dev/')
+    from (new File(project.buildDir, 'libs/')) {
+        into ('elasticsearch/')
+    }
+    from (new File("./src/main/resources/plugin-descriptor.properties")) {
+        into ('elasticsearch/')
+    }
+}
+
+pluginZip.dependsOn jar
+
+jar {
+    setBaseName("elasticsearch-shard-placement-allocation-decider-plugin")
+    manifest {
+        attributes  'Implementation-Title': project.name,
+                    'Implementation-Version': project.version,
+                    'Export-Package': project.group
+    }
+
+    from configurations.custom_dependency_injection.asFileTree.files.collect { zipTree(it) }
+}

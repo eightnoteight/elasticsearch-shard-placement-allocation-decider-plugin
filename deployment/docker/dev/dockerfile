@@ -1,0 +1,5 @@
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+
+COPY elasticsearch-shard-placement-allocation-decider-plugin.zip /tmp/elasticsearch-shard-placement-allocation-decider-plugin.zip
+
+RUN bin/elasticsearch-plugin install file:///tmp/elasticsearch-shard-placement-allocation-decider-plugin.zip
