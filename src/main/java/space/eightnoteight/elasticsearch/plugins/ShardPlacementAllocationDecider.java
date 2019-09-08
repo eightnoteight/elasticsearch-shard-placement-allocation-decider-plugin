@@ -49,7 +49,7 @@ public class ShardPlacementAllocationDecider extends AllocationDecider {
         String[] shardPlacementSettings = org.elasticsearch.common.Strings.tokenizeToStringArray(indexSettings.get(PLACEMENT_MAP_SETTINGS_KEY), ";");
         if (shardPlacementSettings.length == 0) {
             logger.debug(
-                    "no settings were configured for this index", shardRouting.shardId()
+                    "no settings were configured for this index.", shardRouting.shardId()
             );
             return super.canAllocate(shardRouting, node, allocation);
         }
